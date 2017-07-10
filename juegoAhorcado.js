@@ -1,33 +1,3 @@
-
-  var letra = prompt("JUEGO AHORCADO -- Ingrese una Letra");
-
-
-juego(letra)
-/*function imprimirHTML (M) {
-  var n = M.length;
-  for (var i = 0; i < n; i++) {
-        console.log(M[i]) ; 
-  }  
-} */
-
-
-function imprimirMatriz (M) {
-  var n = M.length;
-  var hombrecito = "";
-  console.log("--",n);
-
-  for (var i = 0; i < n; i++) {
-        hombrecito += hombre[i]
-        console.log("**" ,hombrecito); 
-  }  
-  /*var dibujo = ""
-   if (partes < 10)
-      for(var x = 0; x < partes; x++) {
-         dibujo += hombre[x]
-      }*/
-      return hombrecito
-} 
-
 function obtienerPalabraSecreta() {
   var libreriaPalabras = ["m u l t i m e d i a", "i n t e r n a u t a", "s e r v i d o r", "p r o t o c o l o", "c o r t a f u e g o s",
   "n a v e g a d o r", "n o d o", "m a r c o", "p a g i n a", "t e l a r a ñ a",
@@ -41,59 +11,55 @@ function obtienerPalabraSecreta() {
   return palabra;
 }
 
-var hombre =  [        "________",    
-                       "   |\n",   
-                       "   |\n",
-                       "   |\n",
-                       "   O\n",
-                        "  /|\\\n",
-                       "  / \\\n",
-                       "         ",
-                       "         ",
-                       "________"];
+var hombre =  [        "______" + '<br/>',
+                       "   | " + '<br/>',
+                       "   | " + '<br/>',
+                       "   O" + '<br/>',
+                       " /\n",
+                       "| " ,
+                       "\\\n   " + '<br/>',
+                       " /     ",
+                       "\\\n  " + '<br/>',
+                       "______" + '<br/>'];
 
+var letraPalabra = []; // declaramos un array vacio
+var palabra = obtienerPalabraSecreta(); // obtenemos la palabra aleatoria de la lista de palabras
 
-//console.log(palabra);
-imprimirMatriz(hombre);
-//imprimirHTML(hombre);
+function ocultaPalabra() 
+{ 
+  var _cadenas = ""; // creamos un string vacio
+  for (var i=0 ; i<palabra.length ; i++) // recorremos la palabra secreta
+    _cadenas += "*"; // por cada elemento lo cambia por el *
+  return _cadenas;// retornamos
+}
 
 function juego()
 {
-  
-   
-  
-  //var letra = llamarLetra();
-  console.log(letra);
-  var palabra = obtienerPalabraSecreta ();
-  console.log(palabra);
-  var intentos = 10;
-  var _cadenas = " ";
-  for(var i=0 ; i < palabra.length ; i++)
-  {
-    //console.log(palabra[i]);
-    if(palabra[i]==letra)
+    var _cadenas = ocultaPalabra().split("");// obtenemos la palabra que ocultamosy la separamos
+    var letra = document.getElementById('letra').value;// capturamos las letras del teclado ingresadas
+    letraPalabra.push(letra);// cada elemento que ingrecemos la añadiremos a nuestro array vacio
+    var errores = 0; // iniciamos un contador de errores en 0
+    var hombrecito = ""; // creamos un string vacio
+
+    for(var i=0 ; i < palabra.length ; i++) // recorremos la palabra elemento por elemento
     {
-      console.log("entro")
-      _cadenas += letra;
-     
-    } 
-    else{
-      _cadenas += "*";
-      var x = imprimirMatriz(hombre);
-      console.log(x);
-      //imprimirMatriz(hombre);
+      for(var j=0 ; j < letraPalabra.length ; j++) // recorremos las letras tecleadas que ingresamos
+          if(palabra[i]==letraPalabra[j]) // comparamos la palabra y las letras ingresadas por teclado
+              _cadenas[i] = letraPalabra[j]; // si hay iguales las añadimos a _cadenas
+    }
+
+    for(var i=0 ; i < letraPalabra.length ; i++) // recorremos las letras tecleadas
+      if(palabra.indexOf(letraPalabra[i])==-1) // el indexOf inicia la busqueda de las letras si no hay dicho valor devuelve -1
+            errores += 1; // acumulador
+
+    for(var i=0 ; i < errores ; i++) // recorremos desde 0 hasta la cantidad de errores encontrados
+    {
+        hombrecito += hombre[i]; // por cada error encontrado nuestra una parte del hombre ahorcado
+        document.getElementById('ahorcado').innerHTML = hombrecito ;  // mostramos al hombre en el html
     }
     
-  }
-  console.log("aqi-- " , _cadenas)
+    if(errores == 10) // si los errores son iguales a 10 
+        alert("ESTAS AHORCADO - GAME OVER"); // mensaje de alerta que perdimos el juego
+    document.getElementById('palabraSecreta').innerHTML = _cadenas.join(""); // mostramos la palabra secreta
 }
-    //var palabras = palabra.split();
-    //console.log(palabra);
-    //if(palabra == letra)
-    //{
-      //console.log(letra);
-       //imprimirHTML(hombre);
-    //}
-
-
 
